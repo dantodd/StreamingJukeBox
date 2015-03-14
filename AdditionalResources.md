@@ -4,4 +4,4 @@
 * Pianobar is required for the Pandora module I've written to work
 * some application that will download and manage podcasts for you, I use podget.
 * an application to read the id3 tags in your podcasts I use id3v2
-
+* an application to play the podcast mp3s. I use omxplayer 
