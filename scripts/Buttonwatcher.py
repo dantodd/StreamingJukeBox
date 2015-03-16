@@ -8,7 +8,7 @@
 ##  Butonwatcher's other job is to manage the main menu for source selection.
 
 
-import sys,
+import sys
 #import serial, os, socket
 from time import sleep
 import sys
