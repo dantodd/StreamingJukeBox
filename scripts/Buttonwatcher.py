@@ -11,7 +11,7 @@ import RPi.GPIO as GPIO
 
 # Uncomment the modules you are using.
 import SJB_DisplayManager as display
-import SJB_Pandora as Pandora
+import SJB_Pandora as pandora
 
 
 
@@ -19,12 +19,12 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
 
-GPIO.setup(13, GPIO.IN) # Skip Song
-GPIO.setup(19, GPIO.IN) # Change Station
-GPIO.setup(4, GPIO.IN) # Vol -
-GPIO.setup(17, GPIO.IN) # Vol +
-GPIO.setup(27, GPIO.IN) # Play/Pause
-GPIO.setup(22, GPIO.IN) # Menu
+GPIO.setup(13, GPIO.IN) # Button1
+GPIO.setup(19, GPIO.IN) # Button2
+GPIO.setup(4, GPIO.IN) # ButtonDown
+GPIO.setup(17, GPIO.IN) # ButtonUp
+GPIO.setup(27, GPIO.IN) # Button5
+GPIO.setup(22, GPIO.IN) # Button6
 
 scripts_folder_location = '/home/pi/StreamingJukeBox/scripts/'
 pianobar_folder_location = '/home/pi/.config/pianobar/'
@@ -32,118 +32,97 @@ pianobar_folder_location = '/home/pi/.config/pianobar/'
 #fifo_folder_location = '/home/pi/.config/pianobar/test.txt'
 
 
-SJBModule_active = "Pianobar"
+SJBModule = "Pandora"
 
 
-def main():
-    print "testing the main loop"
 
 # MAIN MENU 
 
-def Activate_menu():
-    print "this is something"
-
-
-
-
-
-
-# BEGIN Pianobar button module
-
-def Button1(channel):
-    print "launching Pandora.Button1"
-    sleep(.2)
-    Pandora.Button1()
-    display.StationUpdate()
-
-
-def Button2(channel):
-    print "launching Pandora.Button2"
-    sleep(.2)
-    Pandora.Button2()
-    display.SongUpdate()
-
-
-def ButtonDown(channel):
-    print "launching Pandora.ButtonDown"
-    sleep(.20)
-    Pandora.Button2()
-    display.SongUpdate()
-
-
-def ButtonUp(channel):
-    print "launching Pandora.ButtonUp"
-    sleep(.20)
-    Pandora.ButtonUp()
-    display.SongUpdate()
-
-
-def Button5(channel):
-    print "launching Pandora.Button5"
-    sleep(.0)
-    Pandora.Button5()
-    display.SongUpdate()
-
-
-def Button6(channel):
-    print "launching Pandora.Button6"
-    sleep(.2)
-    Pandora.Button6()
-    display.SongUpdate()
-	
-#  END Pianobar button module
-
-
-# Paste module specific Function Arrays here:
-
-
-
-
-def Menu_test(channel):
-    # print "hit menu_test function"
-    sleep(.2)
-    if GPIO.input(22):
-        # print "gpio polled high"
-        sleep(1.5)
-        if GPIO.input(22):
-            print Activate_menu()
-        else:
-            # print "gpio didn't poll high"
-            print Button6()
-    else:
-        # print "trying to run Button action 5"
-        print Button6()
+##def Activate_menu():
+##    print "this is something"
+##
+##
+##def Menu_test(channel):
+##    # print "hit menu_test function"
+##    #sleep(.2)
+##    if GPIO.input(22):
+##        # print "gpio polled high"
+##        sleep(1.5)
+##        if GPIO.input(22):
+##            print Activate_menu()
+##        else:
+##            # print "gpio didn't poll high"
+##            print Button6()
+##    else:
+##        # print "trying to run Button action 5"
+##        print Button6()
 
 
 
 
 # GPIO button interrupts
-
-GPIO.add_event_detect(13, GPIO.RISING, callback=Button1, bouncetime=200)
-GPIO.add_event_detect(19,GPIO.RISING,  callback=Button2, bouncetime=200) 
-GPIO.add_event_detect(4, GPIO.RISING, callback=ButtonDown, bouncetime=200) 
-GPIO.add_event_detect(17, GPIO.RISING, callback=ButtonUp, bouncetime=200) 
-GPIO.add_event_detect(27, GPIO.RISING, callback=Button5, bouncetime=200) 
-#GPIO.add_event_detect(22, GPIO.RISING, callback=Menu_test, bouncetime=200) 
-GPIO.add_event_detect(22, GPIO.RISING, callback=Button6, bouncetime=200) 
+GPIO.add_event_detect(13, GPIO.RISING, bouncetime=200)
+GPIO.add_event_detect(19,GPIO.RISING, bouncetime=200)
+GPIO.add_event_detect(4, GPIO.RISING, bouncetime=200) 
+GPIO.add_event_detect(17, GPIO.RISING, bouncetime=200)
+GPIO.add_event_detect(27, GPIO.RISING, bouncetime=200) 
+GPIO.add_event_detect(22, GPIO.RISING, bouncetime=200) 
 
 
 
+while True:
+        
+#    GPIO.add_event_detect(13, GPIO.RISING, bouncetime=200)
+    if GPIO.event_detected(13):
+        print "launching " + SJBModule + ".Button1"
+        if SJBModule == "Pandora":
+            pandora.Button1()
+        elif SJBModule == "Podcasts":
+            SJBPodcasts.Button1()
+        
+#    GPIO.add_event_detect(19,GPIO.RISING, bouncetime=200)
+    if GPIO.event_detected(19):
+        print "launching " + SJBModule + ".Button2"
+        if SJBModule == "Pandora":
+            pandora.Button2()
+        elif SJBModule == "Podcasts":
+            SJBPodcasts.Button2()
+
+    
+#    GPIO.add_event_detect(4, GPIO.RISING, bouncetime=200) 
+    if GPIO.event_detected(4):
+        print "launching " + SJBModule + ".ButtonDown"
+        if SJBModule == "Pandora":
+            pandora.ButtonDown()
+        elif SJBModule == "Podcasts":
+            SJBPodcasts.ButtonDown()
 
 
+#    GPIO.add_event_detect(17, GPIO.RISING, bouncetime=200) 
+    if GPIO.event_detected(17):
+        print "launching " + SJBModule + ".ButtonUp"
+        if SJBModule == "Pandora":
+            pandora.ButtonUp()
+        elif SJBModule == "Podcasts":
+            SJBPodcasts.ButtonUp()
 
-#while True:
-#    screen_update()
-#    sleep(10)
 
-test_count = 0
-try:
-    while(test_count < 100):
-        test_count = test_count +1
-        sleep(6)
-#        screen_update()
-#        display.SongUpdate()
-        if (test_count > 50):
-            test_count = 0
-except KeyboardInterrupt:  
-    GPIO.cleanup()       # clean up GPIO on CTRL+C exit   
+#    GPIO.add_event_detect(27, GPIO.RISING, bouncetime=200) 
+    if GPIO.event_detected(27):
+        print "launching " + SJBModule + ".Button5"
+        if SJBModule == "Pandora":
+            pandora.Button5()
+        elif SJBModule == "Podcasts":
+            SJBPodcasts.Button5()
+
+
+    #GPIO.add_event_detect(22, GPIO.RISING, callback=Menu_test, bouncetime=200) 
+
+#    GPIO.add_event_detect(22, GPIO.RISING, bouncetime=200) 
+    if GPIO.event_detected(22):
+        print "launching " + SJBModule + ".Button6"
+        if SJBModule == "Pandora":
+            pandora.Button6()
+        elif SJBModule == "Podcasts":
+            SJBPodcasts.Button6()
+            

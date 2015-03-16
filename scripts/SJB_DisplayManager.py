@@ -8,9 +8,11 @@ stationfile_text = "-1"
 lcd = lcddriver.lcd()
 pianobar_folder_location = '/home/pi/.config/pianobar/'
 
-#def main():
-#    print 'hello Dan'
-#    sleep(10)
+
+def update2lines(screen_line1, screen_line2):
+    lcd.lcd_clear()
+    lcd.lcd_display_string(screen_line1, 1)
+    lcd.lcd_display_string(screen_line2, 2)
 
 def StationUpdate():
     global stationfile_text
