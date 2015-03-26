@@ -18,11 +18,9 @@ import RPi.GPIO as GPIO
 # Uncomment the modules you are using.
 import SJB_DisplayManager as display
 import SJB_Pandora as pandora
-#import SJB_Podcasts as podcasts
+import SJB_Podcasts as podcasts
 
 
-# Global variable to store handle of current process that is playing
-#mp = "module process"  
 
 
 # These are the default directory locations as they appear in the
@@ -38,22 +36,22 @@ pianobar_folder_location = '/home/pi/.config/pianobar/'
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
-chan_list = [13, 19, 4, 17, 27, 22]
-GPIO.setup(chan_list, GPIO.IN)
 
-#GPIO.setup(13, GPIO.IN) # Button1
-#GPIO.setup(19, GPIO.IN) # Button2
-#GPIO.setup(4, GPIO.IN) # ButtonDown
-#GPIO.setup(17, GPIO.IN) # ButtonUp
-#GPIO.setup(27, GPIO.IN) # Button5
-#GPIO.setup(22, GPIO.IN) # Button6
+GPIO.setup(13, GPIO.IN) # Button1
+GPIO.setup(19, GPIO.IN) # Button2
+GPIO.setup(4, GPIO.IN) # ButtonDown
+GPIO.setup(17, GPIO.IN) # ButtonUp
+GPIO.setup(27, GPIO.IN) # Button5
+GPIO.setup(22, GPIO.IN) # Button6
 
 
 
 #TODO create source selectoin variables and selection system
+# You must add any new modules manualy to the "Modules" list below
+# using the name of the module EXACTLY as you have imported it.
 SJBModule = "Pandora"
-
-
+# SJBModule = "Podcasts"
+Modules = ['pandora', 'podcasts']
 
 # MAIN MENU 
 
@@ -77,15 +75,15 @@ def Activate_menu():
 def Button1(channel):
     print "launching " + SJBModule + ".Button1"
     if SJBModule == "Pandora":
-        pandora.Button1()
+        pandora.Button(1)
     elif SJBModule == "Podcasts":
-        SJBPodcasts.Button(1)
+        SJBPodcasts.Button('1')
 
     
 def Button2(channel):
     print "launching " + SJBModule + ".Button2"
     if SJBModule == "Pandora":
-        pandora.Button2()
+        pandora.Button('2')
     elif SJBModule == "Podcasts":
         SJBPodcasts.Button(2)
 
@@ -93,7 +91,7 @@ def Button2(channel):
 def ButtonDown(channel):
     print "launching " + SJBModule + ".ButtonDown"
     if SJBModule == "Pandora":
-        pandora.ButtonDown()
+        pandora.Button('Down')
     elif SJBModule == "Podcasts":
         SJBPodcasts.Button(Down)
 
@@ -101,7 +99,7 @@ def ButtonDown(channel):
 def ButtonUp(channel):
     print "launching " + SJBModule + ".ButtonUp"
     if SJBModule == "Pandora":
-        pandora.ButtonUp()
+        pandora.Button('Up')
     elif SJBModule == "Podcasts":
         SJBPodcasts.Button(Up)
 
@@ -109,15 +107,15 @@ def ButtonUp(channel):
 def Button5(channel):
     print "launching " + SJBModule + ".Button5"
     if SJBModule == "Pandora":
-        pandora.Button5()
+        pandora.Button('5')
     elif SJBModule == "Podcasts":
         SJBPodcasts.Button(5)
 
 
 def Button6(channel):
-    print "launching " + SJBModule + ".Button6"
+    print "launching " + SJBModule + ".Button(6)"
     if SJBModule == "Pandora":
-        pandora.Button6()
+        pandora.Button('6')
     elif SJBModule == "Podcasts":
         SJBPodcasts.Button(6)
 	
@@ -128,7 +126,7 @@ def Button6(channel):
 # testing button long press functions for selection of a "Main Menu"
 def Menu_test(channel):
     # print "hit menu_test function"
-    #sleep(.2)
+    sleep(.2)
     if GPIO.input(22):
         # print "gpio polled high"
         sleep(1.5)
@@ -138,7 +136,7 @@ def Menu_test(channel):
             # print "gpio didn't poll high"
             print Button6()
     else:
-        # print "trying to run Button action 6"
+        # print "trying to run Button action 5"
         print Button6()
 
 

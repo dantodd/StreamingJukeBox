@@ -20,6 +20,16 @@ def update2lines(screen_line1, screen_line2):
     lcd.lcd_display_string(screen_line1, 1)
     lcd.lcd_display_string(screen_line2, 2)
 
+def updateMenu(screen_line1, screen_line2):
+    lcd.lcd_clear()
+    #lcd.lcd_write_four_bits(0x01 | 0x08)
+#    lcd.lcd_strobe(0x00)
+    lcd.lcd_display_string( '-> ' + screen_line1, 1)
+#    lcd.lcd_write(0x01, 0x01)
+    lcd.lcd_display_string(screen_line2, 2)
+
+
+
 ##def StationUpdate():
 ##    global stationfile_text
 ##    stationfile = open(pianobar_folder_location + 'station')

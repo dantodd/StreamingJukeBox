@@ -66,20 +66,17 @@ def UpdateDisplay():
 # pgrep is a bit dangerous to use here but if installed as instructed it works well
 #
 
-def Button(ButtonVal):
+def Button(ButtonVal): #Skip Song
     global mp
     if mp == None:
         if ButtonVal == "6":
-            print "this is button 6 mp is none"
             #        mp = subprocess.Popen('pianobar', shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             mp = subprocess.Popen('pianobar', shell=True, stdin=subprocess.PIPE)
             #mp.stdin.write('s')
             #mp.stdout.read()
             #    for line in mp.stdout:
             #        mp = lstrip()
-            print mp
-            print "is None"
-            return
+            print mp        
     if mp != None:
         if ButtonVal == "1":
             mp.stdin.write('n')
@@ -90,20 +87,13 @@ def Button(ButtonVal):
                 current_station = old_station + 1     
             else:
                 current_station = 0
-            statSTR = str(current_station)
-            mp.stdin.write('s' + statSTR + '\n')
+            statSTR = ("s" + str(current_station))
+            mp.stdin.write('s10')
+            print (statSTR)
+            print (str(current_station))
         if ButtonVal == "Down":
             mp.stdin.write('(')
-        if ButtonVal == "Up": # Volume up
+        if ButtonVal = "Up": # Volume up
             mp.stdin.write(')')
-        if ButtonVal == "5": # Pause/play
+        if ButonVal = "5": # Pause/play
             mp.stdin.write('p')
-        if ButtonVal == "6": # quit
-            print "this is button 6 mp is not none"
-            mp.stdin.write('q')
-            mp = None
-        #print mp 
-        return
-        
-def MenuButton(ButtonVal):
-    
