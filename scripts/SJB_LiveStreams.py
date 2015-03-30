@@ -67,43 +67,23 @@ def UpdateDisplay():
 #
 
 def Button(ButtonVal):
-    global mp
-    if mp == None:
-        if ButtonVal == "6":
-            print "this is button 6 mp is none"
-            #        mp = subprocess.Popen('pianobar', shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-            mp = subprocess.Popen('pianobar', shell=True, stdin=subprocess.PIPE)
-            #mp.stdin.write('s')
-            #mp.stdout.read()
-            #    for line in mp.stdout:
-            #        mp = lstrip()
-            print mp
-            print "is None"
-            return
-    if mp != None:
-        if ButtonVal == "1":
-            mp.stdin.write('n')
-        if ButtonVal == "2":
-            global current_station
-            old_station = current_station
-            if (old_station < (total_stations -1)):
-                current_station = old_station + 1     
-            else:
-                current_station = 0
-            statSTR = str(current_station)
-            mp.stdin.write('s' + statSTR + '\n')
-        if ButtonVal == "Down":
-            mp.stdin.write('(')
-        if ButtonVal == "Up": # Volume up
-            mp.stdin.write(')')
-        if ButtonVal == "5": # Pause/play
-            mp.stdin.write('p')
-        if ButtonVal == "6": # quit
-            print "this is button 6 mp is not none"
-            mp.stdin.write('q')
-            mp = None
-        #print mp 
-        return
+    
+    if ButtonVal == "1":
+        print "LiveStreams Button1"
+    if ButtonVal == "2":
+        print "LiveStreams Button2"
+    if ButtonVal == "Down":
+        print "LiveStreams ButtonDown"
+    if ButtonVal == "Up": # Volume up
+        print "LiveStreams ButtonUp"
+    if ButtonVal == "5": # Pause/play
+        print "LiveStreams Button5"
+    if ButtonVal == "6": # quit
+        print "LiveStreams button6"
+    return
+        
+def MenuButton(ButtonVal):
+    print "placeholders"
         
 def MenuButton(ButtonVal):
     print "placeholders"

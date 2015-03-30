@@ -13,20 +13,29 @@ import sys
 from time import sleep
 import sys
 import RPi.GPIO as GPIO
+import importlib
 
 
-# Uncomment the modules you are using.
+# These are the functional modules needed by StreamingJukeBox
 import SJB_DisplayManager as display
-import SJB_Pandora as pandora
-import SJB_Podcasts as podcasts
+
+# List Modules to load here.
+# 1) The Modules must all be in the same directory as the Buttonwatch file.
+# 2) They must be listed exactly as they appear in the filename excluding
+#     the "SJB" portion and the file extension.
+# for example the module SJB_Pandora.py is entered as 'Pandora'
+# The modules will be listed in the display in the order you enter them here.
+
+Modules = ['Pandora', 'Spotify', 'Podcasts', 'LiveStreams']
 
 
 
-
-# These are the default directory locations as they appear in the
+#These are the default directory locations as they appear in the
 # installation guide.
 scripts_folder_location = '/home/pi/StreamingJukeBox/scripts/'
 pianobar_folder_location = '/home/pi/.config/pianobar/'
+
+
 
 
 
@@ -48,46 +57,68 @@ GPIO.setup(22, GPIO.IN) # Button6
 
 
 
-# You must add any new modules manualy to the "Modules" list below
-# using the name of the module EXACTLY as you have imported it.
-Modules = ['pandora', 'podcasts', 'test2', 'test3', 'test4']
+
+# Import modules listed above and generate list of modules.
+i=0
+ModuleNames = []
+while i < len(Modules):
+    ModuleNames.insert(i, str(Modules[i]))
+    Modules[i] = __import__('SJB_' + Modules[i])
+    print Modules[i]
+    i = i + 1
 
 # Set default module here. Again use the name exactly as you have imported it.
-SJBModule = pandora
-# SJBModule = podcasts
+#SJBSource = Pandora
+SJBSource = Modules[0]
 MenuSelect = 'no'
 
-#TODO create source selectoin system in MainMenu function below
+#TODO create source selection system in MainMenu function below
 
 def MainMenu(MenuButton):
-    global SJBModule
+    global MenuSelect
+    a = 0
+    b = 1
+    global SJBSource
+
     if (MenuButton == "init"):
+        print "MainMenu init"
         a=0
         b=1
-        display.updateMenu(Modules[a], Modules[b])
+        display.updateMenu (ModuleNames[a], ModuleNames[b])
+        print "MenuSelect = " + MenuSelect
     if(MenuButton == "5"):
-        SJBModule = str(Modules[a])
+        print 'a = ' + a
+        print Modules[a]
+        print SJBSource
+        MenuSelect = "no"
+        display.clear()
+        print SJBSource
     if(MenuButton == "Up"):
-       if(a==0):
-           a = len(Modules())
+        if(a == 0):
+           a = (len(Modules) -1)
            b = 0
-       else:
-           a = a - 1
-           if (b == 0):
-               b = len(Modules())
-           else:
-               b = b - 1
+           display.updateMenu(ModuleNames[a], ModuleNames[b])
+        else:
+            a = a - 1
+            if (b == 0):
+                b = (len(Modules)-1)
+            else:
+                b = b - 1
+            display.updateMenu(ModuleNames[a], ModuleNames[b])
     if(MenuButton == "Down"):
-        if (b == len(Modules())):
+        if (b == (len(Modules) - 1)):
             b = 0
             a = a + 1
+            display.updateMenu(ModuleNames[a], ModuleNames[b])
         else:
             b = b + 1
-            if(a == len(Modules())):
+            if(a == (len(Modules) - 1)):
                 a = 0
             else:
                 a = a + 1
-    print Modules[0] + " and " + Modules[1]
+            display.updateMenu(ModuleNames[a], ModuleNames[b])
+    print a, b
+    print "a = " + ModuleNames[a] + " and b = " + ModuleNames[b]
    
 
     
@@ -110,84 +141,84 @@ def MainMenu(MenuButton):
 
 
 def Button1(channel):
-    print "launching.Button1"
-    print SJBModule
     if(MenuSelect == 'menu'):
         MainMenu('1')
     else:
-        SJBModule.Button(1)
+        print "launching.Button1"
+        print SJBSource
+        SJBSource.Button('1')
+                        
     
     
 def Button2(channel):
-    print "launching.Button2"
     if(MenuSelect == 'menu'):
         MainMenu('2')
     else:
-        SJBModule.Button('2')
+        print "launching.Button2"
+        print SJBSource
+        SJBSource.Button('2')
     
 def ButtonDown(channel):
-    print "launching.ButtonDown"
     if(MenuSelect == 'menu'):
         MainMenu('Down')
     else:
-        SJBModule.Button('Down')
-    print SJBModule
+        print "launching.ButtonDown"
+        print SJBSource
+        SJBSource.Button('Down')
 
 
 def ButtonUp(channel):
-    print "launching.ButtonUp"
     if(MenuSelect == 'menu'):
         MainMenu('Up')
     else:
-        SJBModule.Button('Up')
-    print SJBModule
+        print "launching.ButtonUp"
+        print SJBSource
+        SJBSource.Button('Up')
 
 
 def Button5(channel):
-    print "launching.Button5"
     if(MenuSelect == 'menu'):
         MainMenu('5')
     else:
-        SJBModule.Button('5')
-    print SJBModule
+        print "launching.Button5"
+        print SJBSource
+        SJBSource.Button('5')
 
 
 def Button6(channel):
-    print "launching.Button(6)"
     if(MenuSelect == 'menu'):
         MainMenu('6')
     else:
-        SJBModule.Button('6')
-    print SJBModule
+        print "launching.Button6"
+        print SJBSource
+        SJBSource.Button('6')
+    #print SJBSource
     
-	
-#  END SJBModule button module
+    
+#  END SJBSource button module
 
 
 
 
 # testing button long press functions for selection of a "Main Menu"
 def Menu_test(channel):
-    sleep(.2)
+    global MenuSelect
+    sleep(.25)
     i = 0
     if GPIO.input(22):
-        while i < 4:
+        while i < 7:
             sleep(.25)
             if GPIO.input(22):
                 i= i + 1
-                continue
             else:
                 # print "gpio didn't poll high"
-               Button6('a')
+               Button6(channel)
                break
         MenuSelect = 'menu'    
         MainMenu("init")
-        
-
     else:
-        # print "trying to run Button action 5"
-        Button6('a')
-
+        Button6(channel)
+    
 
 
 

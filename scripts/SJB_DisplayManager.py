@@ -28,7 +28,8 @@ def updateMenu(screen_line1, screen_line2):
 #    lcd.lcd_write(0x01, 0x01)
     lcd.lcd_display_string(screen_line2, 2)
 
-
+def clear():
+    lcd.lcd_clear()
 
 ##def StationUpdate():
 ##    global stationfile_text

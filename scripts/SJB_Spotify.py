@@ -8,21 +8,12 @@ import os
 from time import sleep
 import SJB_DisplayManager as display
 
-#mp is the process file handle for the pandora module pianobar
-mp = None
-
-# Pianobar setup; wil definitely need manual setup.
-total_stations = 16
-current_station = total_stations - 1
-
 
 # File locations, may need manual setup.
 scripts_folder_location = '/home/pi/StreamingJukeBox/scripts/'
-pianobar_folder_location = '/home/pi/.config/pianobar/'
-fifo_folder_location = '/home/pi/.config/pianobar/ctl'
 
-# Staions array
-# Stations[] 
+
+
 
 # MAIN MENU 
 # If you instal all the modules required where directed nothing should need
@@ -67,43 +58,20 @@ def UpdateDisplay():
 #
 
 def Button(ButtonVal):
-    global mp
-    if mp == None:
-        if ButtonVal == "6":
-            print "this is button 6 mp is none"
-            #        mp = subprocess.Popen('pianobar', shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-            mp = subprocess.Popen('pianobar', shell=True, stdin=subprocess.PIPE)
-            #mp.stdin.write('s')
-            #mp.stdout.read()
-            #    for line in mp.stdout:
-            #        mp = lstrip()
-            print mp
-            print "is None"
-            return
-    if mp != None:
-        if ButtonVal == "1":
-            mp.stdin.write('n')
-        if ButtonVal == "2":
-            global current_station
-            old_station = current_station
-            if (old_station < (total_stations -1)):
-                current_station = old_station + 1     
-            else:
-                current_station = 0
-            statSTR = str(current_station)
-            mp.stdin.write('s' + statSTR + '\n')
-        if ButtonVal == "Down":
-            mp.stdin.write('(')
-        if ButtonVal == "Up": # Volume up
-            mp.stdin.write(')')
-        if ButtonVal == "5": # Pause/play
-            mp.stdin.write('p')
-        if ButtonVal == "6": # quit
-            print "this is button 6 mp is not none"
-            mp.stdin.write('q')
-            mp = None
-        #print mp 
-        return
+    
+    if ButtonVal == "1":
+        print "Spotify Button1"
+    if ButtonVal == "2":
+        print "Spotify Button2"
+    if ButtonVal == "Down":
+        print "Spotify ButtonDown"
+    if ButtonVal == "Up": # Volume up
+        print "Spotify ButtonUp"
+    if ButtonVal == "5": # Pause/play
+        print "Spotify Button5"
+    if ButtonVal == "6": # quit
+        print "Spotify button6"
+    return
         
 def MenuButton(ButtonVal):
     print "placeholders"
